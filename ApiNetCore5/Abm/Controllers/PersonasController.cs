@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Abm.Data;
 using Abm.Models;
 using Abm.Services;
+using Abm.Dto.ModelsDto;
 
 namespace Abm.Controllers
 {
@@ -15,24 +16,22 @@ namespace Abm.Controllers
     [ApiController]
     public class PersonasController : ControllerBase
     {
-        private readonly PersonaContexto _context;
         private IServicesPersona _iServicesPersona;
         public PersonasController(PersonaContexto context)
-        {
-            _context = context;
-            _iServicesPersona = new ServicesPersona(this._context);
+        { 
+            _iServicesPersona = new ServicesPersona(context);
 
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Persona>>> Getpersonas()
+        public async Task<ActionResult<IEnumerable<PersonaDto>>> Getpersonas()
         {
             var resultado = _iServicesPersona.GetPersonasList();
             return resultado;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Persona>> GetPersona(int id)
+        public async Task<ActionResult<PersonaDto>> GetPersona(int id)
         {
            
             var resultado = _iServicesPersona.GetPersona(id);

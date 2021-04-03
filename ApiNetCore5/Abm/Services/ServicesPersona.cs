@@ -1,4 +1,6 @@
 ﻿using Abm.Data;
+using Abm.Dto.Map;
+using Abm.Dto.ModelsDto;
 using Abm.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,10 +13,11 @@ namespace Abm.Services
     public class ServicesPersona : IServicesPersona
     {
         private readonly PersonaContexto _context;
-
+        private IMapPersona _iMapPersona;
         public ServicesPersona(PersonaContexto context)
         {
             _context = context;
+            _iMapPersona = new MapPersona();
         }
         public void DeletePersona(int Id)
         {
@@ -26,18 +29,18 @@ namespace Abm.Services
 
         }
 
-        public Persona GetPersona(int Id)
+        public PersonaDto GetPersona(int Id)
         {
             var Persona = _context.personas.Find(Id);
-
-            return Persona;
+            var resultadolistaPersona = _iMapPersona.GetPersonaMap(Persona);
+            return resultadolistaPersona;
         }
 
-        public List<Persona> GetPersonasList()
+        public List<PersonaDto> GetPersonasList()
         {
             var listaPersonas = _context.personas.ToList();
-
-            return listaPersonas;
+            var resultadolistaPersonas = _iMapPersona.GetPersonasListMap(listaPersonas);
+            return resultadolistaPersonas;
         }
 
         public void PostPersona(Persona ItemPersona)
